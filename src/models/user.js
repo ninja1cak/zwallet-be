@@ -36,7 +36,7 @@ model.addUser = ({
 
 model.getDataByEmail = ({email}) =>{
     return new Promise((resolve, reject) =>{
-        database.query(`SELECT id_user, username, password FROM public.user WHERE email = $1 `
+        database.query(`SELECT user_id, username, password, status FROM public.user WHERE email = $1 `
         ,[email]).then((res)=>{
             resolve(res.rows)
         }).catch((error) =>{
