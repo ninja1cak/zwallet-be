@@ -22,4 +22,22 @@ ctrl.insertUser = async (req, res) =>{
     }
 }
 
+ctrl.showUser = async (req, res) =>{
+    try {
+        const data = await model.getUser(req.id);
+        return respons(res, 200, data)
+    } catch (error) {
+        return respons(res, 404, error)
+    }
+}
+
+ctrl.showAllUser = async (req, res) =>{
+    try {
+        const data = await model.getAllUser();
+        return respons(res, 200, data)
+    } catch (error) {
+        return respons(res, 404, error)
+    }
+}
+
 module.exports = ctrl

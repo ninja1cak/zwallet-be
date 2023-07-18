@@ -15,7 +15,7 @@ const configSendMail = (email, confirmationCode) =>{
         from: process.env.NODEMAILER_EMAIL,
         to: email,
         subject: "Activation Account",
-        text: `Open this link for account verfivication : localhost:5000/verify/${confirmationCode}`
+        text: `Open this link for account verfivication : localhost:8888/auth/${confirmationCode}`
     }
 
     transporter.sendMail(mailOptions, (error, info) =>{

@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const {generateToken} = require('../utils/jwt')
 const ctrl = {}
+const jwt = require('jsonwebtoken')
 const model = require('../models/user')
 const {respons} = require('../utils/respons')
 
@@ -40,6 +41,29 @@ ctrl.login = async (req, res) =>{
     } catch (error) {
         return respons(res, 404, error.message)
 
+    }
+}
+
+ctrl.verifyUser = async (req, res) =>{
+    try {
+        const {token} = req.params
+        console.log('params', token)
+        jwt.verify(token, process.env.KEY, (error, decode) =>{
+            if(error){
+                return res.send({status : 404, message: "verification fail"})
+            }
+            req.email = decode
+        })
+
+        const params = {
+            email: req.email,
+            status: 'active'
+        }
+
+        const data = await model.updateUserStatus(params)
+        return respons(res, 200, "verify success")
+    } catch (error) {
+        return respons(res, 404, error.message)
     }
 }
 
