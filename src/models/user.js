@@ -34,4 +34,15 @@ model.addUser = ({
     })
 }
 
+model.getDataByEmail = ({email}) =>{
+    return new Promise((resolve, reject) =>{
+        database.query(`SELECT id_user, username, password FROM public.user WHERE email = $1 `
+        ,[email]).then((res)=>{
+            resolve(res.rows)
+        }).catch((error) =>{
+            reject(error)
+        })
+    })
+}
+
 module.exports = model
