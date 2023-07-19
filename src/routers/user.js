@@ -2,8 +2,9 @@ const ctrl = require('../controllers/user')
 const express = require('express')
 const route = express.Router()
 const auth = require('../middleware/authCheck')
+const validateUserEmail = require('../middleware/validateUserEmail')
 
-route.post('/', ctrl.insertUser)
+route.post('/', validateUserEmail ,ctrl.insertUser)
 route.get('/', auth.check, ctrl.showUser)
 route.get('/all', auth.check, ctrl.showAllUser)
 

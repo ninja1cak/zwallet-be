@@ -72,7 +72,9 @@ model.getAllUser = () =>{
             SELECT
                 first_name,
                 last_name,
-                phone_number
+                phone_number,
+                username,
+                email
             FROM 
                 public.user 
         `).then((res) =>{
@@ -135,4 +137,18 @@ model.updateUserStatus = ({email, status}) =>{
     })
 }
 
+model.readByUser = (username, email) =>{
+    return new Promise ((resolve, reject) => {
+      database.query(`SELECT * FROM public.user WHERE username = $1 OR email = $2`, [username, email])
+      .then((res) => {
+        resolve(res.rows)
+      })
+      .catch((error) =>{
+  
+        error = "Failed"
+        reject(error)
+      })
+  
+    })
+  }
 module.exports = model
