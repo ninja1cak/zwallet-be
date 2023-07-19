@@ -4,7 +4,7 @@ const ctrl = {}
 const jwt = require('jsonwebtoken')
 const model = require('../models/user')
 const {respons} = require('../utils/respons')
-
+const sendMail = require('../utils/mailer')
 ctrl.login = async (req, res) =>{
     try {
         const {email, password} = req.body
@@ -66,6 +66,22 @@ ctrl.verifyUser = async (req, res) =>{
         return respons(res, 200, "verify success")
     } catch (error) {
         return respons(res, 404, error.message)
+    }
+}
+
+ctrl.forgetPassword = async (req, res) =>{
+    try {
+        const {email} = req.body
+        const data = await model.getDataByEmail({email})
+        if(data == ''){
+            return respons(res, 401, 'EMAIL NOT REGISTER')
+        }
+        const token = jwt.sign(email, process.env.KEY)
+        
+        sendMail(email, token, 'forget_password')
+        return res.send(data)
+    } catch (error) {
+        return res.send(error)
     }
 }
 

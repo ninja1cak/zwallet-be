@@ -7,6 +7,5 @@ const validateUserEmail = require('../middleware/validateUserEmail')
 route.post('/', validateUserEmail ,ctrl.insertUser)
 route.get('/', auth.check, ctrl.showUser)
 route.get('/all', auth.check, ctrl.showAllUser)
-
-
+route.patch('/', auth.check, ctrl.changeDataUser)
 module.exports = route

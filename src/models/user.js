@@ -1,7 +1,7 @@
 const model = {}
 const { resolve } = require('path')
 const database = require('../config/database')
-
+const escape = require('pg-format')
 
 model.addUser = ({	
     username,
@@ -85,31 +85,37 @@ model.getAllUser = () =>{
     })
 }
 
-model.updateUser = ({username, email, password, phone_number, first_name, last_name, photo_profile, pin, status, user_id}) =>{
+model.updateUser = ({email, password, phone_number, first_name, last_name, photo_profile, pin,  user_id}) =>{
     return new Promise ((resolve, reject) =>{
-        console.log({username, email, password, phone_number, first_name, last_name, photo_profile, pin, status, user_id})
+        console.log({email, password, phone_number, first_name, last_name, photo_profile, pin,  user_id})
+        
+        let searchByUserId = ''
+        let searchByEmail = ''
+        if(user_id){
+            searchByUserId += escape(`AND user_id = %s`, user_id)
+        }else{
+            searchByEmail += escape(`AND email = %L`, email)
+        }
+        
         database.query(`
         UPDATE public.user
         SET
-          username = COALESCE(NULLIF($1, ''), username),      
-          email = COALESCE(NULLIF($2, ''), email),
-          password = COALESCE(NULLIF($3, ''), password),
-          phone_number = COALESCE(NULLIF($4, '+62'), phone_number),
-          first_name = COALESCE(NULLIF($5, ''), first_name),
-          last_name = COALESCE(NULLIF($6, ''), last_name),
-          photo_profile = COALESCE(NULLIF($7, ''), photo_profile),
-          pin = COALESCE(NULLIF($8, ''), pin)
-        WHERE user_id = $9
+          email = COALESCE(NULLIF($1, ''), email),
+          password = COALESCE(NULLIF($2, ''), password),
+          phone_number = COALESCE(NULLIF($3, '+62'), phone_number),
+          first_name = COALESCE(NULLIF($4, ''), first_name),
+          last_name = COALESCE(NULLIF($5, ''), last_name),
+          photo_profile = COALESCE(NULLIF($6, ''), photo_profile),
+          pin = COALESCE(NULLIF($7, ''), pin)
+        WHERE true ${searchByUserId} ${searchByEmail}
         `, [
-            username, 
             email, 
             password, 
             phone_number, 
             first_name, 
             last_name, 
             photo_profile, 
-            pin, 
-            user_id
+            pin
         ]).then((res) =>{
             resolve(res.rowCount)
         }).catch((err) =>{
@@ -117,6 +123,7 @@ model.updateUser = ({username, email, password, phone_number, first_name, last_n
         })
     })
 }
+
 
 model.updateUserStatus = async ({email, status,user_id}) =>{
     const db = await database.connect()

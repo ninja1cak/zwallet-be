@@ -21,10 +21,6 @@ const validate = async (req, res, next) =>{
    return res.send(error)
   }
 
-
-
-
-
 }
 
 module.exports = validate

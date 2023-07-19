@@ -12,7 +12,7 @@ ctrl.insertUser = async (req, res) =>{
         
         const hashPassword = await hash(password)
         const activationCode = jwt.sign(email, process.env.KEY)
-        sendMail(email, activationCode)
+        sendMail(email, activationCode, 'activate')
 
         const result = await model.addUser({username, email, password: hashPassword, pin})
         return respons(res, 201, result)
@@ -37,6 +37,21 @@ ctrl.showAllUser = async (req, res) =>{
         return respons(res, 200, data)
     } catch (error) {
         return respons(res, 404, error)
+    }
+}
+
+ctrl.changeDataUser = async (req, res) =>{
+    try {
+        let {email, password, phone_number, first_name, last_name, photo_profile, pin} = req.body
+
+        if(password) {
+            password = await hash(password)
+        }
+        const data = model.updateUser({email, password, phone_number, first_name, last_name, photo_profile, pin, user_id : req.id})
+        return respons(res, 200, "Update success")
+    } catch (error) {
+        return respons(res, 400, error.message)
+
     }
 }
 
