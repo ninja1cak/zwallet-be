@@ -31,7 +31,6 @@ create table public.account_balance(
 --table transaction_log 
 create table public.transaction_log(
 	transaction_id serial not null unique,
-	account_balance_id int not null,
 	sender_id int not null,
 	receiver_id int default 0,
 	amount int default 0,
@@ -40,7 +39,11 @@ create table public.transaction_log(
 	constraint transaction_log_fk  foreign key(account_balance_id) references public.account_balance(account_balance_id) on delete cascade
 )
 
+
 SELECT user_id, password FROM public.user WHERE email = $1
 update public.user set status = 'active' where user_id = 1 
 update public.user set status = 'pending' where email = '98hauzank@gmail.com'
-delete from public.user where user_id = 8
+delete from public.user where user_id = 13
+delete from public.transaction_log tl  where transaction_id  < 99
+
+
