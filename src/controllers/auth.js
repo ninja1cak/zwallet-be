@@ -47,17 +47,19 @@ ctrl.login = async (req, res) =>{
 ctrl.verifyUser = async (req, res) =>{
     try {
         const {token} = req.params
-        console.log('params', token)
         jwt.verify(token, process.env.KEY, (error, decode) =>{
             if(error){
                 return res.send({status : 404, message: "verification fail"})
             }
             req.email = decode
         })
+        const dataUser = await model.getDataByEmail({email: req.email})
+        console.log('dataUser', token)
 
         const params = {
             email: req.email,
-            status: 'active'
+            status: 'active',
+            user_id: dataUser[0].user_id
         }
 
         const data = await model.updateUserStatus(params)

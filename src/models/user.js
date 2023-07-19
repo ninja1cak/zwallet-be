@@ -118,23 +118,38 @@ model.updateUser = ({username, email, password, phone_number, first_name, last_n
     })
 }
 
-model.updateUserStatus = ({email, status}) =>{
-    return new Promise ((resolve, reject) =>{
-        console.log(email)
-        database.query(`
-        UPDATE public.user
-        SET         
-          status = $1
-        WHERE email = $2
-        `, [
-            status,
-            email
-        ]).then((res) =>{
-            resolve(res.rowCount)
-        }).catch((err) =>{
-            reject(err)
-        })
-    })
+model.updateUserStatus = async ({email, status,user_id}) =>{
+    const db = await database.connect()
+    try {
+        await db.query('BEGIN')
+        
+        const updateStatus =  await db.query(`
+            UPDATE public.user
+            SET         
+                status = $1
+            WHERE email = $2
+        `, [status, email])
+
+        await db.query(` 
+            INSERT INTO public.account_balance(
+                user_id,
+                balance,
+                income,
+                expense
+            ) VALUES (
+                $1,
+                0,
+                0,
+                0
+            )`,[user_id])
+
+        await db.query('COMMIT')
+        return updateStatus.rowCount
+    } catch (error) {
+        await db.query('ROLLBACK')
+        return error
+
+    }
 }
 
 model.readByUser = (username, email) =>{
