@@ -16,4 +16,4 @@ NODEMAILER_PASSWORD = [YOUR EMAIL PASSWORD]
 ```
 ## POSTMAN 
 Postman for testing backend can be download:
-<a href='https://drive.google.com/file/d/15IXY-rWQAK0nFqQg_yupCeKxCshjOby5/view?usp=drive_link'> Click Here </a>
+<a href='https://drive.google.com/drive/folders/1n-yIUA23_JWdll-l-HOuLL0YYPfeemtJ?usp=sharing'> Click Here </a>
