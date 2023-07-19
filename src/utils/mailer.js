@@ -10,13 +10,28 @@ const transporter = nodemailer.createTransport({
 })
 
 
-const configSendMail = (email, confirmationCode) =>{
-    const mailOptions = {
-        from: process.env.NODEMAILER_EMAIL,
-        to: email,
-        subject: "Activation Account",
-        text: `Open this link for account verfivication : localhost:8888/auth/${confirmationCode}`
+const configSendMail = (email, confirmationCode, condition) =>{
+    let mailOptions = {}
+
+    if(condition == 'activate'){
+        mailOptions = {
+            from: process.env.NODEMAILER_EMAIL,
+            to: email,
+            subject: "Activation Account",
+            text: `Open this link for account verfivication : localhost:8888/auth/${confirmationCode}`
+        }    
     }
+
+    if(condition == 'forget_password'){
+        mailOptions = {
+            from: process.env.NODEMAILER_EMAIL,
+            to: email,
+            subject: "Change Password",
+            text: `Open this link for change password : localhost:8888/auth/forget_password?code=${confirmationCode}}`
+        }    
+    }
+
+    console.log(mailOptions)
 
     transporter.sendMail(mailOptions, (error, info) =>{
         if(error){
