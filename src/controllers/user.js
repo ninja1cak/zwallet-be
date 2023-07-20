@@ -4,6 +4,7 @@ const {respons} = require('../utils/respons')
 const hash = require('../utils/hash')
 const sendMail = require('../utils/mailer')
 const jwt = require('jsonwebtoken')
+const upload = require('../utils/upload')
 
 ctrl.insertUser = async (req, res) =>{
     try {
@@ -69,12 +70,19 @@ ctrl.showAllUser = async (req, res) =>{
 
 ctrl.changeDataUser = async (req, res) =>{
     try {
-        let {email, password, phone_number, first_name, last_name, photo_profile, pin} = req.body
-
+        let {email, password, phone_number, first_name, last_name, pin} = req.body
+        let url_photo = ''
         if(password) {
             password = await hash(password)
         }
-        const data = model.updateUser({email, password, phone_number, first_name, last_name, photo_profile, pin, user_id : req.id})
+        console.log(req.file)
+        if(req.file != undefined){
+            url_photo = await upload(req.file.path) 
+        }else{
+            return respons(res, 400, 'png, jpg, jpeg only')
+        }
+
+        const data = model.updateUser({email, password, phone_number, first_name, last_name, photo_profile: url_photo, pin, user_id : req.id})
         return respons(res, 200, "Update success")
     } catch (error) {
         return respons(res, 400, error.message)
