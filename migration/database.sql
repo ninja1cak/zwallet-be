@@ -35,8 +35,7 @@ create table public.transaction_log(
 	receiver_id int default 0,
 	amount int default 0,
 	note text,
-	transfer_date timestamp without time zone null,
-	constraint transaction_log_fk  foreign key(account_balance_id) references public.account_balance(account_balance_id) on delete cascade
+	transfer_date timestamp without time zone null
 )
 
 
