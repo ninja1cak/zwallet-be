@@ -15,7 +15,6 @@ model.addUser = ({
                 first_name,
                 email,
                 password,
-                pin,
                 last_name,
                 username,
                 status,
@@ -25,11 +24,10 @@ model.addUser = ({
                 $2,
                 $3,
                 $4,
-                $5,
-                $6,
+                $5,                
                 'pending',
                 'now()'
-            )`,[first_name, email, password, pin, last_name, username]
+            )`,[first_name, email, password, last_name, username]
             ).then((res) =>{
                 res = 'create user success'
                 resolve(res)
