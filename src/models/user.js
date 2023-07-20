@@ -79,14 +79,20 @@ model.getUser = (user_id) =>{
     })
 }
 
-model.getAllUser = async ({page, limit, search}) =>{
+model.getAllUser = async ({page, limit, search, user_id}) =>{
     try {
         const offset =  (page-1) * limit
         let searchQuery = ''
+        let searchQueryId = ''
 
         if(search){
             searchQuery = escape(`AND concat(first_name, ' ', last_name) ILIKE %L`, search)
         }
+
+        if(user_id){
+            searchQueryId = escape(`AND user_id = %s`, user_id)
+        }
+
 
         const totalData = await database.query(`
             SELECT COUNT(user_id) count from public.user
@@ -99,6 +105,7 @@ model.getAllUser = async ({page, limit, search}) =>{
         }
         const data = await database.query(`
             SELECT
+                user_id,
                 first_name,
                 last_name,
                 phone_number,
@@ -106,7 +113,7 @@ model.getAllUser = async ({page, limit, search}) =>{
                 email
             FROM 
                 public.user 
-            WHERE true  ${searchQuery}
+            WHERE true  ${searchQuery} ${searchQueryId}
             LIMIT $1
             OFFSET $2
         `,[limit, offset])

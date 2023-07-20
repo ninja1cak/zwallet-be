@@ -5,7 +5,8 @@ const {respons} = require('../utils/respons')
 
 ctrl.transactionMoney = async (req, res) =>{ 
     try {
-        const {receiver_id, amount, note} = req.body
+        const {amount, note} = req.body
+        const {receiver_id} = req.query
         console.log({receiver_id, amount, note})
         
         const account_balance = await modelAccBalance.getAccountBalance(req.id)

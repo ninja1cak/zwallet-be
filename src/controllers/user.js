@@ -42,7 +42,7 @@ ctrl.showUser = async (req, res) =>{
 
 ctrl.showAllUser = async (req, res) =>{
     try {
-        const {page, limit, search} = req.query
+        const {page, limit, search, id} = req.query
         console.log('tes')
         if(search ===undefined || search === ''){
             req.query.search = ''
@@ -52,6 +52,7 @@ ctrl.showAllUser = async (req, res) =>{
       
         const params = {
         ...req.query,
+        user_id : id || '',
         page : page || 1,
         limit : limit || 4
         }
