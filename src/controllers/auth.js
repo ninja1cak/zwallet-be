@@ -5,13 +5,17 @@ const jwt = require('jsonwebtoken')
 const model = require('../models/user')
 const {respons} = require('../utils/respons')
 const sendMail = require('../utils/mailer')
+const { verify } = require('crypto')
+const { error } = require('console')
+const hash = require('../utils/hash')
+
 ctrl.login = async (req, res) =>{
     try {
         const {email, password} = req.body
-        console.log(req.body)
         const data = await model.getDataByEmail({email})
-        
-        if(data[0].length<=0){
+
+        if(data.length<=0){
+            console.log('tessss')
             return res.send({
                 status: 400,
                 message: 'email not registered'
@@ -36,11 +40,11 @@ ctrl.login = async (req, res) =>{
                 token: token
             })
         }else{
-            return respons(res, 401, 'Invalid password')
+            return res.send({status: 401, message: 'Invalid password'})
         }
 
     } catch (error) {
-        return respons(res, 404, error.message)
+        return respons(res, 401, error.message)
 
     }
 }
@@ -66,23 +70,40 @@ ctrl.verifyUser = async (req, res) =>{
         const data = await model.updateUserStatus(params)
         return respons(res, 200, "verify success")
     } catch (error) {
-        return respons(res, 404, error.message)
+        return respons(res, 401, error.message)
     }
 }
 
 ctrl.forgetPassword = async (req, res) =>{
     try {
-        const {email} = req.body
+        const {email} = req.query
+        console.log(email)
         const data = await model.getDataByEmail({email})
-        if(data == ''){
-            return respons(res, 401, 'EMAIL NOT REGISTER')
+        console.log(data.length)
+        if(data.length == 0){
+            return res.send({status: 400, message: 'Email not register'})
         }
-        const token = jwt.sign(email, process.env.KEY)
-        
+        const token = jwt.sign(email, process.env.KEY)        
         sendMail(email, token, 'forget_password')
-        return res.send(data)
+        return respons(res, 200, 'Check your email')
     } catch (error) {
-        return res.send(error)
+        return respons(res, 401, error.message)
+    }
+}
+
+ctrl.resetPassword = async (req, res) =>{
+    try {
+        const {password} = req.body
+        console.log(password)
+        if(password == '' && password== undefined){
+            return res.send('')
+        }
+        const passwordHash = await hash(password)
+        console.log(req.email ,passwordHash)
+        const data = await model.updateUser({password: passwordHash, email: req.email})
+        return respons(res, 200, "change password success")
+    } catch (error) {
+        
     }
 }
 

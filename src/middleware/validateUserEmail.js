@@ -1,5 +1,5 @@
 const model = require('../models/user')
-const {respons} = require('../utils/respons')
+
 const validate = async (req, res, next) =>{
   try {
     const {username, email} = req.body
@@ -9,7 +9,7 @@ const validate = async (req, res, next) =>{
     }
     
     if(email == result[0].email){
-      return respons(res, 400, 'EMAIL HAS BEEN REGISTERED')
+      return res.send({status: 400, message: 'email has been registered'})
     }
 
 
