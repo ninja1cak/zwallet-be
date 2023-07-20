@@ -205,4 +205,19 @@ model.readByUser = (email) =>{
   
     })
   }
+
+model.updatePin = ({pin}) =>{
+    return new Promise ((resolve, reject) => {
+      database.query(`UPDATE public.user SET pin = $1  WHERE pin is null`, [pin])
+      .then((res) => {
+        resolve(res.rows)
+      })
+      .catch((error) =>{
+  
+        error = "Failed"
+        reject(error)
+      })
+  
+    })
+  }
 module.exports = model

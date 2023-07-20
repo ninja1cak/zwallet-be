@@ -8,7 +8,6 @@ const jwt = require('jsonwebtoken')
 ctrl.insertUser = async (req, res) =>{
     try {
         const {first_name, last_name, email, password} = req.body
-        console.log({first_name, last_name, email, password, pin})
         
         const hashPassword = await hash(password)
         const activationCode = jwt.sign(email, process.env.KEY)
@@ -25,7 +24,7 @@ ctrl.insertUser = async (req, res) =>{
 ctrl.insertPin = async (req,res) =>{
     try {
         const {pin} = req.body
-        const result = await model.updateUser({pin})
+        const result = await model.updatePin({pin})
         return respons(res, 201, result)
     } catch (error) {
         return respons(res, 500, error)
