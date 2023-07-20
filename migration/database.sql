@@ -46,4 +46,15 @@ update public.user set status = 'pending' where email = '98hauzank@gmail.com'
 delete from public.user where user_id = 13
 delete from public.transaction_log tl  where transaction_id  < 99
 
+SELECT sender_id, receiver_id, amount
+FROM public.transaction_log
+WHERE sender_id = 11 OR receiver_id =11
+
+SELECT sender_id, receiver_id, amount, first_name, last_name, user_id
+FROM public.transaction_log left outer join public.user on sender_id = 11 or receiver_id = 11 
+
+
+
+
+
 

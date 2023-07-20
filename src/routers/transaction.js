@@ -5,4 +5,5 @@ const auth = require('../middleware/authCheck')
 
 
 route.post('/', auth.check, ctrl.transactionMoney)
+route.get('/', auth.check ,ctrl.getTransactionLogById)
 module.exports = route

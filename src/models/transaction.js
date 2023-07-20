@@ -50,4 +50,37 @@ model.transactionMoney = async ({sender_id, receiver_id, amount, note}) =>{
     }
 }
 
+model.readTransactionLogById = (user_id) =>{
+    return new Promise((resolve, reject) =>{
+        
+        console.log(user_id)
+        database.query(`
+
+        SELECT 
+            sender_id, 
+            receiver_id, 
+            amount, 
+            first_name, 
+            last_name, 
+            user_id, 
+            transfer_date
+        FROM 
+            public.transaction_log  
+        JOIN
+             public.user 
+        ON 
+            (sender_id = user_id and user_id != $1 ) 
+        OR
+            (receiver_id = user_id and user_id != $1 ) order by transfer_date desc
+        LIMIT 4
+        
+        `,[user_id]
+        ).then((res) =>{
+            resolve(res.rows)
+        }).catch((err) =>{
+            reject(err)
+        })
+    })
+}
+
 module.exports = model

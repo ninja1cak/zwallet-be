@@ -53,11 +53,21 @@ model.getUser = (user_id) =>{
                 first_name,
                 last_name,
                 email,
-                phone_number
+                phone_number,
+                pin,
+                photo_profile,
+                balance,
+                expense,
+                income
             FROM 
-                public.user 
+                public.user u 
+            JOIN
+                public.account_balance ab
+            ON
+                u.user_id = ab.user_id
+            
             WHERE
-                user_id = $1
+                u.user_id = $1
         `,[user_id]).then((res) =>{
             resolve(res.rows)
         }).catch((err)=>{

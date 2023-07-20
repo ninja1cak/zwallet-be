@@ -23,5 +23,17 @@ ctrl.transactionMoney = async (req, res) =>{
     }
 }
 
+ctrl.getTransactionLogById = async (req, res) =>{
+    try {
+        const data = await model.readTransactionLogById(req.id)
+        
+        return respons(res, 200, data)
+        
+    } catch (error) {
+        
+        return respons(res, 400, error.message)
+        
+    }
+} 
 
 module.exports = ctrl

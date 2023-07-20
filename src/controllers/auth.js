@@ -8,8 +8,9 @@ const sendMail = require('../utils/mailer')
 ctrl.login = async (req, res) =>{
     try {
         const {email, password} = req.body
+        console.log(req.body)
         const data = await model.getDataByEmail({email})
-
+        
         if(data[0].length<=0){
             return res.send({
                 status: 400,
