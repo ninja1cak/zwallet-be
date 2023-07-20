@@ -4,7 +4,7 @@
 --table user
 create table public.user(
 	user_id serial not null unique,
-	username varchar(255) not null unique,
+	username varchar(255),
 	email varchar(255) not null UNIQUE,
 	password varchar(255) not null,
 	pin varchar(255),
@@ -52,8 +52,16 @@ WHERE sender_id = 11 OR receiver_id =11
 SELECT sender_id, receiver_id, amount, first_name, last_name, user_id
 FROM public.transaction_log left outer join public.user on sender_id = 11 or receiver_id = 11 
 
+            SELECT
+                first_name,
+                last_name,
+                phone_number,
+                username,
+                email
+            FROM 
+                public.user where concat(first_name, ' ', last_name) ilike '%Hauzan%'
 
-
-
+alter table public.user drop constraint user_username_key
+select * from information_schema.table_constraints;
 
 

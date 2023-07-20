@@ -1,20 +1,23 @@
 const model = {}
-const { resolve } = require('path')
 const database = require('../config/database')
 const escape = require('pg-format')
 
 model.addUser = ({	
-    username,
+    first_name,
+    last_name,
 	email,
 	password,
 	pin}) =>{
     return new Promise((resolve, reject) =>{
+        const username = `${first_name} ${last_name}`
         database.query(`
             insert into public.user(
-                username,
+                first_name,
                 email,
                 password,
                 pin,
+                last_name,
+                username,
                 status,
                 updated_at	
             ) VALUES(
@@ -22,9 +25,11 @@ model.addUser = ({
                 $2,
                 $3,
                 $4,
+                $5,
+                $6,
                 'pending',
                 'now()'
-            )`,[username,email,password,pin]
+            )`,[first_name, email, password, pin, last_name, username]
             ).then((res) =>{
                 res = 'create user success'
                 resolve(res)
@@ -76,9 +81,25 @@ model.getUser = (user_id) =>{
     })
 }
 
-model.getAllUser = () =>{
-    return new Promise ((resolve, reject) =>{
-        database.query(`
+model.getAllUser = async ({page, limit, search}) =>{
+    try {
+        const offset =  (page-1) * limit
+        let searchQuery = ''
+
+        if(search){
+            searchQuery = escape(`AND concat(first_name, ' ', last_name) ILIKE %L`, search)
+        }
+
+        const totalData = await database.query(`
+            SELECT COUNT(user_id) count from public.user
+        `)
+        const count = totalData.rows[0].count
+        const meta = {
+          next : count == 0 ? null : page == Math.ceil(count/limit) ? null : Number(page) + 1,
+          prev : page == 1 ? null : Number(page) - 1,
+          total: count
+        }
+        const data = await database.query(`
             SELECT
                 first_name,
                 last_name,
@@ -87,12 +108,15 @@ model.getAllUser = () =>{
                 email
             FROM 
                 public.user 
-        `).then((res) =>{
-            resolve(res.rows)
-        }).catch((err)=>{
-            reject(err)
-        })
-    })
+            WHERE true  ${searchQuery}
+            LIMIT $1
+            OFFSET $2
+        `,[limit, offset])
+
+        return {data: data.rows, meta:meta}
+    } catch (error) {
+        return error
+    }
 }
 
 model.updateUser = ({email, password, phone_number, first_name, last_name, photo_profile, pin,  user_id}) =>{
@@ -169,9 +193,9 @@ model.updateUserStatus = async ({email, status,user_id}) =>{
     }
 }
 
-model.readByUser = (username, email) =>{
+model.readByUser = (email) =>{
     return new Promise ((resolve, reject) => {
-      database.query(`SELECT * FROM public.user WHERE username = $1 OR email = $2`, [username, email])
+      database.query(`SELECT * FROM public.user WHERE email = $1`, [email])
       .then((res) => {
         resolve(res.rows)
       })

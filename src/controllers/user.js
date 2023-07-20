@@ -7,14 +7,14 @@ const jwt = require('jsonwebtoken')
 
 ctrl.insertUser = async (req, res) =>{
     try {
-        const {username, email, password, pin} = req.body
-        console.log({username, email, password, pin})
+        const {first_name, last_name, email, password, pin} = req.body
+        console.log({first_name, last_name, email, password, pin})
         
         const hashPassword = await hash(password)
         const activationCode = jwt.sign(email, process.env.KEY)
         sendMail(email, activationCode, 'activate')
 
-        const result = await model.addUser({username, email, password: hashPassword, pin})
+        const result = await model.addUser({first_name, last_name, email, password: hashPassword, pin})
         return respons(res, 201, result)
     } catch (error) {
         console.log(error)
@@ -33,7 +33,24 @@ ctrl.showUser = async (req, res) =>{
 
 ctrl.showAllUser = async (req, res) =>{
     try {
-        const data = await model.getAllUser();
+        const {page, limit, search} = req.query
+        console.log('tes')
+        if(search ===undefined || search === ''){
+            req.query.search = ''
+          }else{
+            req.query.search =`%${search}%`
+          }
+      
+        const params = {
+        ...req.query,
+        page : page || 1,
+        limit : limit || 4
+        }
+
+        console.log('tes1')
+
+
+        const data = await model.getAllUser(params);
         return respons(res, 200, data)
     } catch (error) {
         return respons(res, 404, error)
