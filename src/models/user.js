@@ -79,7 +79,7 @@ model.getUser = (user_id) =>{
     })
 }
 
-model.getAllUser = async ({page, limit, search, user_id}) =>{
+model.getAllUser = async ({page, limit, search, user_id, login_id}) =>{
     try {
         const offset =  (page-1) * limit
         let searchQuery = ''
@@ -113,7 +113,7 @@ model.getAllUser = async ({page, limit, search, user_id}) =>{
                 email
             FROM 
                 public.user 
-            WHERE true  ${searchQuery} ${searchQueryId}
+            WHERE true  ${searchQuery} ${searchQueryId} AND user_id != ${login_id}
             LIMIT $1
             OFFSET $2
         `,[limit, offset])

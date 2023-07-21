@@ -55,7 +55,8 @@ ctrl.showAllUser = async (req, res) =>{
         ...req.query,
         user_id : id || '',
         page : page || 1,
-        limit : limit || 4
+        limit : limit || 4,
+        login_id: req.id
         }
 
         console.log('tes1')
