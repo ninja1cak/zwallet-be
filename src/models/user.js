@@ -53,6 +53,7 @@ model.getUser = (user_id) =>{
     return new Promise ((resolve, reject) =>{
         database.query(`
             SELECT
+                u.user_id,
                 first_name,
                 last_name,
                 email,
@@ -95,7 +96,7 @@ model.getAllUser = async ({page, limit, search, user_id, login_id}) =>{
 
 
         const totalData = await database.query(`
-            SELECT COUNT(user_id) count from public.user
+            SELECT COUNT(user_id) count from public.user WHERE status = 'active' AND user_id != ${login_id}
         `)
         const count = totalData.rows[0].count
         const meta = {
@@ -113,11 +114,11 @@ model.getAllUser = async ({page, limit, search, user_id, login_id}) =>{
                 email
             FROM 
                 public.user 
-            WHERE true  ${searchQuery} ${searchQueryId} AND user_id != ${login_id}
+            WHERE true  ${searchQuery} ${searchQueryId} AND user_id != ${login_id} AND status = 'active'
             LIMIT $1
             OFFSET $2
         `,[limit, offset])
-
+        console.log(data.rows)
         return {data: data.rows, meta:meta}
     } catch (error) {
         return error
