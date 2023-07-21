@@ -50,11 +50,46 @@ model.transactionMoney = async ({sender_id, receiver_id, amount, note}) =>{
     }
 }
 
-model.readTransactionLogById = (user_id) =>{
-    return new Promise((resolve, reject) =>{
-        
-        console.log(user_id)
-        database.query(`
+model.readTransactionLogById = async (user_id, {page, limit}) =>{
+    try {
+        const offset =  (page-1) * limit
+
+        const totalData = await database.query(`
+
+        SELECT COUNT (tlog.user_id)
+        FROM 
+            (
+                SELECT 
+                    sender_id, 
+                    receiver_id, 
+                    amount, 
+                    user_id, 
+                    transfer_date
+                FROM 
+                    public.transaction_log  
+                JOIN
+                    public.user 
+                ON 
+                    (sender_id = user_id and user_id = $1 ) 
+                OR
+                    (receiver_id = user_id and user_id = $1 ) 
+            ) tlog
+        JOIN 
+            public.user u 
+        ON 
+            (sender_id = u.user_id and u.user_id != $1)
+        OR
+            (receiver_id = u.user_id and u.user_id != $1) 
+        `,[user_id]
+        )
+        const count = totalData.rows[0].count
+        console.log(count)
+        const meta = {
+            next : count == 0 ? null : page == Math.ceil(count/limit) ? null : Number(page) + 1,
+            prev : page == 1 ? null : Number(page) - 1,
+            total: count
+          }
+        const data = await database.query(`
 
         SELECT 
             sender_id, 
@@ -62,25 +97,38 @@ model.readTransactionLogById = (user_id) =>{
             amount, 
             first_name, 
             last_name, 
-            user_id, 
+            tlog.user_id, 
             transfer_date
         FROM 
-            public.transaction_log  
-        JOIN
-             public.user 
+            (
+                SELECT 
+                    sender_id, 
+                    receiver_id, 
+                    amount, 
+                    user_id, 
+                    transfer_date
+                FROM 
+                    public.transaction_log  
+                JOIN
+                    public.user 
+                ON 
+                    (sender_id = user_id and user_id = $1 ) 
+                OR
+                    (receiver_id = user_id and user_id = $1 ) 
+            ) tlog
+        JOIN 
+            public.user u 
         ON 
-            (sender_id = user_id and user_id != $1 ) 
+            (sender_id = u.user_id and u.user_id != $1)
         OR
-            (receiver_id = user_id and user_id != $1 ) order by transfer_date desc
-        LIMIT 4
-        
-        `,[user_id]
-        ).then((res) =>{
-            resolve(res.rows)
-        }).catch((err) =>{
-            reject(err)
-        })
-    })
+            (receiver_id = u.user_id and u.user_id != $1) 
+        ORDER BY transfer_date desc LIMIT $2 OFFSET ${offset}
+        `,[user_id, limit]
+        )
+        return {data: data.rows, meta: meta}
+    } catch (error) {
+        return error
+    }    
 }
 
 module.exports = model

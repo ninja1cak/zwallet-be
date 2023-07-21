@@ -26,7 +26,9 @@ ctrl.transactionMoney = async (req, res) =>{
 
 ctrl.getTransactionLogById = async (req, res) =>{
     try {
-        const data = await model.readTransactionLogById(req.id)
+        const {limit, page} = req.query
+
+        const data = await model.readTransactionLogById(req.id, {limit: limit || 4, page: page || 1})
         
         return respons(res, 200, data)
         

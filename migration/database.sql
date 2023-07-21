@@ -64,4 +64,54 @@ FROM public.transaction_log left outer join public.user on sender_id = 11 or rec
 alter table public.user drop constraint user_username_key
 select * from information_schema.table_constraints;
 
+SELECT 
+    sender_id, 
+    receiver_id, 
+    amount, 
+    first_name, 
+    last_name, 
+    tlog.user_id, 
+    transfer_date
+FROM 
+    (
+        SELECT 
+            sender_id, 
+            receiver_id, 
+            amount, 
+            user_id, 
+            transfer_date
+        FROM 
+            public.transaction_log  
+        JOIN
+             public.user 
+        ON 
+            (sender_id = user_id and user_id = 15 ) 
+        OR
+            (receiver_id = user_id and user_id = 15 ) 
+    ) tlog
+JOIN 
+ 	public.user u 
+ON 
+	(sender_id = u.user_id and u.user_id != 15)
+OR
+    (receiver_id = u.user_id and u.user_id != 15) 
+
+
+
+        SELECT 
+            sender_id, 
+            receiver_id, 
+            amount, 
+            user_id, 
+            transfer_date
+        FROM 
+            public.transaction_log  
+        JOIN
+             public.user 
+        ON 
+            (sender_id = user_id and user_id = 11 ) 
+        OR
+            (receiver_id = user_id and user_id = 11 ) order by transfer_date desc
+        LIMIT 99
+
 
