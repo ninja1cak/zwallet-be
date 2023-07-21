@@ -1,10 +1,11 @@
 const model = {}
 const database = require('../config/database')
 
-model.transactionMoney = async ({sender_id, receiver_id, amount, note}) =>{
+model.transactionMoney = async ({sender_id, receiver_id, amount, note, transfer_date}) =>{
     const db = await database.connect()
     try {
-        console.log({sender_id, receiver_id, amount, note})
+        console.log({receiver_id, amount, note, transfer_date})
+
         await db.query('BEGIN')
         const data = await db.query(`
         INSERT INTO public.transaction_log(
@@ -18,33 +19,35 @@ model.transactionMoney = async ({sender_id, receiver_id, amount, note}) =>{
             $2,
             $3,
             $4,
-            now()
-        ) `, [sender_id, receiver_id, amount, note])        
-        
+            $5
+        ) `, [sender_id, receiver_id, amount, note, transfer_date])        
+        console.log('tes')
+
         await db.query(`
         UPDATE public.account_balance
         SET 
             balance = balance + $1,
             income = income + $1,
-            updated_at = now()
+            updated_at = $3
         WHERE
             user_id = $2
-        `, [amount, receiver_id])
-        
+        `, [amount, receiver_id, transfer_date])
+        console.log('tes 1')
+
         await db.query(`
         UPDATE public.account_balance
         SET 
             balance = balance - $1,
             expense = expense + $1,
-            updated_at = now()
+            updated_at = $3
         WHERE
             user_id = $2
-        `, [amount, sender_id])
+        `, [amount, sender_id, transfer_date])
         
         await db.query('COMMIT')
         return 'Transaction Success'
     } catch (error) {
-        
+        console.log(error)
         await db.query('ROLLBACK')
         return error
     }

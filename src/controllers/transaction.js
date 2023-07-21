@@ -5,17 +5,16 @@ const {respons} = require('../utils/respons')
 
 ctrl.transactionMoney = async (req, res) =>{ 
     try {
-        const {amount, note} = req.body
+        const {amount, note, transfer_date} = req.body
         const {receiver_id} = req.query
-        console.log({receiver_id, amount, note})
         
         const account_balance = await modelAccBalance.getAccountBalance(req.id)
 
         if(account_balance[0].balance < amount){
             return respons(res, 400, 'Account balance not enough')
         }
-        
-        const data = await model.transactionMoney({sender_id: req.id, receiver_id, amount, note})
+        console.log('sebelum transaction money')
+        const data = await model.transactionMoney({sender_id: req.id, receiver_id, amount, note: note || '', transfer_date})
         console.log(account_balance)
         return respons(res, 201, data)
 
