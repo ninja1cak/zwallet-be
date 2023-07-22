@@ -4,7 +4,8 @@ const {respons} = require('../utils/respons')
 
 ctrl.getAccountBalance = async (req,res) =>{
     try {
-        const data = await model.getAccountBalance({user_id : req.id})
+        console.log('tes')
+        const data = await model.getAccountBalance(req.id)
         return respons(res, 200, data)
     } catch (error) {
         return respons(res, 404, error.messsage)
