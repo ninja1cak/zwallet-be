@@ -69,13 +69,10 @@ ctrl.showAllUser = async (req, res) =>{
     }
 }
 
-ctrl.changeDataUser = async (req, res) =>{
+ctrl.updateImageUser = async (req, res) =>{
     try {
-        let {email, password, phone_number, first_name, last_name, pin} = req.body
         let url_photo = ''
-        if(password) {
-            password = await hash(password)
-        }
+
         console.log(req.file)
         if(req.file != undefined){
             url_photo = await upload(req.file.path) 
@@ -83,7 +80,24 @@ ctrl.changeDataUser = async (req, res) =>{
             return respons(res, 400, 'png, jpg, jpeg only')
         }
 
-        const data = model.updateUser({email, password, phone_number, first_name, last_name, photo_profile: url_photo, pin, user_id : req.id})
+        const data = model.updateUser({photo_profile: url_photo, user_id : req.id})
+        return respons(res, 200, "Update success")
+    } catch (error) {
+        return respons(res, 400, error.message)
+
+    }
+}
+
+ctrl.changeDataUser = async (req, res) =>{
+    try {
+        let {password, phone_number, pin} = req.body
+        let url_photo = ''
+        if(password) {
+            password = await hash(password)
+        }
+        console.log(req.file)
+
+        const data = model.updateUser({password, phone_number,  pin, user_id : req.id})
         return respons(res, 200, "Update success")
     } catch (error) {
         return respons(res, 400, error.message)

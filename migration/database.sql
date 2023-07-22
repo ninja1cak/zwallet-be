@@ -92,11 +92,19 @@ FROM
 JOIN 
  	public.user u 
 ON 
-	(sender_id = u.user_id and u.user_id != 15)
+(	(sender_id = u.user_id and u.user_id != 15)
 OR
-    (receiver_id = u.user_id and u.user_id != 15) 
+    (receiver_id = u.user_id and u.user_id != 15) )
+and
+	tlog.transfer_date >= current_date 
+    
+select *
+from public.transaction_log tl 
+where transfer_date > now() - interval '1 week' and transfer_date < current_date ;
 
-
+select *
+from public.transaction_log tl 
+where transfer_date >= current_date ;
 
         SELECT 
             sender_id, 

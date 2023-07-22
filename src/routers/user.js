@@ -9,5 +9,7 @@ route.post('/', validateUserEmail ,ctrl.insertUser)
 route.put('/', ctrl.insertPin)
 route.get('/', auth.check, ctrl.showUser)
 route.get('/all', auth.check, ctrl.showAllUser)
-route.patch('/', auth.check, upload.single('image'), ctrl.changeDataUser)
+route.patch('/', auth.check, upload.single('image'), ctrl.updateImageUser)
+route.patch('/update', auth.check, ctrl.changeDataUser)
+
 module.exports = route
