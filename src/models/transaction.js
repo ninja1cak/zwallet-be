@@ -67,7 +67,8 @@ model.readTransactionLogById = async (user_id, {page, limit}) =>{
                     receiver_id, 
                     amount, 
                     user_id, 
-                    transfer_date
+                    transfer_date,
+                    note
                 FROM 
                     public.transaction_log  
                 JOIN
@@ -101,7 +102,8 @@ model.readTransactionLogById = async (user_id, {page, limit}) =>{
             first_name, 
             last_name, 
             tlog.user_id, 
-            transfer_date
+            transfer_date,
+            note
         FROM 
             (
                 SELECT 
@@ -109,7 +111,8 @@ model.readTransactionLogById = async (user_id, {page, limit}) =>{
                     receiver_id, 
                     amount, 
                     user_id, 
-                    transfer_date
+                    transfer_date,
+                    note
                 FROM 
                     public.transaction_log  
                 JOIN
