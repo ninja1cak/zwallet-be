@@ -18,7 +18,7 @@ const configSendMail = (email, confirmationCode, condition) =>{
             from: process.env.NODEMAILER_EMAIL,
             to: email,
             subject: "Activation Account",
-            text: `Open this link for account verfivication : localhost:8888/auth/${confirmationCode}`
+            text: `Open this link for account verfivication : http://localhost:3000/create-pin/${confirmationCode}`
         }    
     }
 
@@ -27,7 +27,7 @@ const configSendMail = (email, confirmationCode, condition) =>{
             from: process.env.NODEMAILER_EMAIL,
             to: email,
             subject: "Change Password",
-            text: `Open this link for change password : http://localhost:3000/reset/${confirmationCode}}`
+            text: `Open this link for change password : http://localhost:3000/reset/${confirmationCode}`
         }    
     }
 

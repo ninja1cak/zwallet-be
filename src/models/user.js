@@ -214,9 +214,9 @@ model.readByUser = (email) =>{
     })
   }
 
-model.updatePin = ({pin}) =>{
+model.updatePin = ({pin, email}) =>{
     return new Promise ((resolve, reject) => {
-      database.query(`UPDATE public.user SET pin = $1  WHERE pin is null`, [pin])
+      database.query(`UPDATE public.user SET pin = $1  WHERE email = $2`, [pin,email])
       .then((res) => {
         resolve(res.rows)
       })

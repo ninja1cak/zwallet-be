@@ -68,7 +68,7 @@ ctrl.verifyUser = async (req, res) =>{
         }
 
         const data = await model.updateUserStatus(params)
-        return respons(res, 200, "verify success")
+        return respons(res, 200, {message:"verify success", email: req.email})
     } catch (error) {
         return respons(res, 401, error.message)
     }

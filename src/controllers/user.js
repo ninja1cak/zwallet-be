@@ -25,7 +25,8 @@ ctrl.insertUser = async (req, res) =>{
 ctrl.insertPin = async (req,res) =>{
     try {
         const {pin} = req.body
-        const result = await model.updatePin({pin})
+        const {email} = req.query
+        const result = await model.updatePin({pin, email})
         return respons(res, 201, result)
     } catch (error) {
         return respons(res, 500, error)
