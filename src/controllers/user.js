@@ -5,7 +5,7 @@ const hash = require('../utils/hash')
 const sendMail = require('../utils/mailer')
 const jwt = require('jsonwebtoken')
 const upload = require('../utils/upload')
-
+const bcrypt = require('bcrypt')
 ctrl.insertUser = async (req, res) =>{
     try {
         const {first_name, last_name, email, password} = req.body
@@ -91,10 +91,25 @@ ctrl.updateImageUser = async (req, res) =>{
 
 ctrl.changeDataUser = async (req, res) =>{
     try {
-        let {password, phone_number, pin} = req.body
-        let url_photo = ''
-        if(password) {
-            password = await hash(password)
+
+        let {oldPassword,password, phone_number, pin, email} = req.body
+        let passwordFromDB
+        if(email){
+            passwordFromDB = await model.getDataByEmail({email})
+        }
+
+        if(password && oldPassword) {
+            console.log(oldPassword, passwordFromDB[0].password)
+
+            console.log(password, oldPassword)
+
+            const isPassword = await bcrypt.compare(oldPassword, passwordFromDB[0].password)
+            console.log(isPassword, passwordFromDB[0].password)
+            if(isPassword){
+                password = await hash(password)
+            }else{
+                return res.send({status: 404, message: "Password is wrong"})
+            }
         }
         console.log(req.file)
 

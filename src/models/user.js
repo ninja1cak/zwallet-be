@@ -111,7 +111,8 @@ model.getAllUser = async ({page, limit, search, user_id, login_id}) =>{
                 last_name,
                 phone_number,
                 username,
-                email
+                email,
+                photo_profile
             FROM 
                 public.user 
             WHERE true  ${searchQuery} ${searchQueryId} AND user_id != ${login_id} AND status = 'active'

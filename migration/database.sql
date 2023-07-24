@@ -122,4 +122,5 @@ where transfer_date >= current_date ;
             (receiver_id = user_id and user_id = 11 ) order by transfer_date desc
         LIMIT 99
 
+delete from public."user"  where user_id = 32
 
