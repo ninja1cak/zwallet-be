@@ -74,9 +74,9 @@ ctrl.updateImageUser = async (req, res) =>{
     try {
         let url_photo = ''
 
-        console.log(req.file)
+        console.log(req)
         if(req.file != undefined){
-            url_photo = await upload(req.file.path) 
+            url_photo = await upload(req.file, 'photo-profile', req.id) 
         }else{
             return respons(res, 400, 'png, jpg, jpeg only')
         }
