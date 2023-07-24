@@ -3,7 +3,7 @@ const express = require('express')
 const route = express.Router()
 const auth = require('../middleware/authCheck')
 const validateUserEmail = require('../middleware/validateUserEmail')
-const upload = require('../middleware/upload')
+const upload = require('../middleware/memoryUpload')
 
 route.post('/', validateUserEmail ,ctrl.insertUser)
 route.put('/', ctrl.insertPin)
