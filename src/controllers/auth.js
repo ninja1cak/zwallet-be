@@ -84,7 +84,7 @@ ctrl.forgetPassword = async (req, res) =>{
             return res.send({status: 400, message: 'Email not register'})
         }
         const token = jwt.sign(email, process.env.KEY)        
-        sendMail(email, token, 'forget_password')
+        await sendMail(email, token, 'forget_password')
         return respons(res, 200, 'Check your email')
     } catch (error) {
         return respons(res, 401, error.message)
