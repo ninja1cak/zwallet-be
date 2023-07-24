@@ -18,16 +18,16 @@ const configSendMail = async (email, confirmationCode, condition) =>{
             from: process.env.NODEMAILER_EMAIL,
             to: email,
             subject: "Activation Account",
-            text: `Open this link for account verfivication : http://localhost:3000/create-pin/${confirmationCode}`
+            text: `Open this link for account verfivication : https://zwallet-a8usg4ee0-ninja1cak.vercel.app//create-pin/${confirmationCode}`
         }    
     }
-
+https://zwallet-a8usg4ee0-ninja1cak.vercel.app/
     if(condition == 'forget_password'){
         mailOptions = {
             from: process.env.NODEMAILER_EMAIL,
             to: email,
             subject: "Change Password",
-            text: `Open this link for change password : http://localhost:3000/reset/${confirmationCode}`
+            text: `Open this link for change password : https://zwallet-a8usg4ee0-ninja1cak.vercel.app//reset/${confirmationCode}`
         }    
     }
 
