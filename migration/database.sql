@@ -3,7 +3,7 @@
 
 --table user
 create table public.user(
-	user_id serial not null unique,
+	user_id serial primary key,
 	username varchar(255),
 	email varchar(255) not null UNIQUE,
 	password varchar(255) not null,
@@ -19,7 +19,7 @@ create table public.user(
 
 --table account_balance 
 create table public.account_balance(
-	account_balance_id serial not null unique,
+	account_balance_id serial primary key,
 	user_id int not null UNIQUE,
 	balance int default 0,
 	income int default 0,
@@ -30,7 +30,7 @@ create table public.account_balance(
 
 --table transaction_log 
 create table public.transaction_log(
-	transaction_id serial not null unique,
+	transaction_id serial primary key,
 	sender_id int not null,
 	receiver_id int default 0,
 	amount int default 0,
