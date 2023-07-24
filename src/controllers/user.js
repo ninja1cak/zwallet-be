@@ -121,4 +121,13 @@ ctrl.changeDataUser = async (req, res) =>{
     }
 }
 
+ctrl.deleteUser = async (req, res) =>{
+    try {
+        const data = await model.removeUser(req.id);
+        return respons(res, 200, data)
+    } catch (error) {
+        return respons(res, 404, error)
+    }
+}
+
 module.exports = ctrl

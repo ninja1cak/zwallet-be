@@ -228,5 +228,29 @@ model.updatePin = ({pin, email}) =>{
       })
   
     })
-  }
+}
+
+model.removeUser = async (user_id) =>{
+    const db = await database.connect()
+    try {
+        await db.query('BEGIN')
+        
+        await db.query(` 
+            DELETE FROM public.account_balance
+            WHERE user_id = $1 `,[user_id])
+
+        await db.query(`
+            DELETE FROM public.user
+            WHERE user_id = $1
+        `, [user_id])
+
+        await db.query('COMMIT')
+        return 'delete success'
+    } catch (error) {
+        await db.query('ROLLBACK')
+        return error
+
+    }
+}
+
 module.exports = model

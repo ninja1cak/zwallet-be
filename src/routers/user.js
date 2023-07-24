@@ -11,5 +11,5 @@ route.get('/', auth.check, ctrl.showUser)
 route.get('/all', auth.check, ctrl.showAllUser)
 route.patch('/', auth.check, upload.single('image'), ctrl.updateImageUser)
 route.patch('/update', auth.check, ctrl.changeDataUser)
-
+route.delete('/', auth.check, ctrl.deleteUser)
 module.exports = route
