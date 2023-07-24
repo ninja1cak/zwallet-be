@@ -12,7 +12,7 @@ ctrl.insertUser = async (req, res) =>{
         
         const hashPassword = await hash(password)
         const activationCode = jwt.sign(email, process.env.KEY)
-        sendMail(email, activationCode, 'activate')
+        await sendMail(email, activationCode, 'activate')
 
         const result = await model.addUser({first_name, last_name, email, password: hashPassword})
         return respons(res, 201, result)
