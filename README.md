@@ -28,15 +28,15 @@ Backend for Zwallet
 
 ## Overview
 
-An online coffee shop is a website that allows users to register,login,make some profile, and order their favorite coffee online. Offering a wide selection of coffee, fast delivery, and convenient ordering, this platform is a practical solution for coffee lovers who want to enjoy the best quality coffee from the comfort of their homes
+Zwallet is an application that focussing in banking needs for all users in the world. Zwallet app supports banking activities such as transfers, top ups, histories, etc. Zwallet app also supports user controls such as login, register, and update profiles.
 
 ## Features
 
-- Authentication & Authorization
-- Products (search, sort, filter, update, create, delete)
-- Customer Role: New Order, Profile
-- Seller Role: Manage Order, Manage Products, Seller Profile
+- Authentication
+- Transaction (search, sort, filter, create)
+- User Role: Tranfer, Profile (Update)
 - Error Handling
+- Email Activation
 - etc.
 
 ## Technologies Used
@@ -44,8 +44,9 @@ An online coffee shop is a website that allows users to register,login,make some
 - [Node js](https://nodejs.org/en/docs)
 - [Express js](https://expressjs.com/)
 - [JsonWebToken](https://www.npmjs.com/package/jsonwebtoken)
-- [MongoDB](https://www.mongodb.com/docs/)
+- [Postgresql](https://www.postgresql.org/)
 - [Cloudinary](https://cloudinary.com/)
+- [Nodemailer](https://nodemailer.com/about/)
 - etc.
 
 ## Getting Started
