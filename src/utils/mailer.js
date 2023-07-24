@@ -21,7 +21,6 @@ const configSendMail = async (email, confirmationCode, condition) =>{
             text: `Open this link for account verfivication : https://zwallet-a8usg4ee0-ninja1cak.vercel.app//create-pin/${confirmationCode}`
         }    
     }
-https://zwallet-a8usg4ee0-ninja1cak.vercel.app/
     if(condition == 'forget_password'){
         mailOptions = {
             from: process.env.NODEMAILER_EMAIL,
