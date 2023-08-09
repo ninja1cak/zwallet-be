@@ -115,7 +115,7 @@ Currently, there are no contributors to this project. If you would like to contr
 
 ## Related Projects
 
-- [Zwallet Front End](https://github.com/Ravictation/zwallet-react/tree/development) - Front End
+- [Zwallet Front End](https://github.com/ninja1cak/zwallet-fe) - Front End
 
 ## License
 
