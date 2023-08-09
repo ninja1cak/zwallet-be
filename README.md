@@ -4,7 +4,7 @@
 
 Backend for Zwallet
 
-[Demo](https://zwallet-be.vercel.app) · [Suggestion](mailto:hauzan41200@gmail.com)
+[Suggestion](mailto:hauzan41200@gmail.com)
 
 <hr>
 <br>
